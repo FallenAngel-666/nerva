@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Business Nervous System</title>
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+    
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="logo">
+            <i data-lucide="brain-circuit" class="logo-icon"></i>
+            <span>NERVA</span>
+        </div>
+        <ul class="nav-links">
+            <li class="active" data-target="scenario-input"><i data-lucide="sliders"></i> Setup Scenario</li>
+            <li data-target="dashboard"><i data-lucide="layout-dashboard"></i> Dashboard & Health</li>
+            <li data-target="predictions"><i data-lucide="zap"></i> What Will Go Wrong?</li>
+            <li data-target="operational-plan"><i data-lucide="clipboard-list"></i> AI Operational Plan</li>
+            <li data-target="simulator"><i data-lucide="git-merge"></i> What-If Simulator</li>
+            <li data-target="digital-twin"><i data-lucide="box"></i> Digital Twin</li>
+            <li data-target="knowledge-graph"><i data-lucide="network"></i> Knowledge Graph</li>
+            <li data-target="data-sources"><i data-lucide="database"></i> System Health</li>
+        </ul>
+        
+        <div class="ai-loop-visualizer">
+            <h4>AI INTELLIGENCE LOOP</h4>
+            <div class="loop-steps">
+                <div class="step active" id="loop-input">INPUT</div>
+                <div class="step" id="loop-detect">DETECT</div>
+                <div class="step" id="loop-predict">PREDICT</div>
+                <div class="step" id="loop-explain">EXPLAIN</div>
+                <div class="step" id="loop-recommend">RECOMMEND</div>
+                <div class="step" id="loop-simulate">SIMULATE</div>
+                <div class="step" id="loop-optimize">OPTIMIZE</div>
+                <div class="step" id="loop-act">ACT</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="industry-selector">
+                <label>Operational Mode:</label>
+                <select id="industry-select">
+                    <option value="generic">Generic Operations</option>
+                    <option value="hospitality">Hospitality / Hotel</option>
+                    <option value="retail">Retail Store</option>
+                    <option value="events">Event / Venue</option>
+                </select>
+            </div>
+            
+            <div class="topbar-right">
+                <button id="btn-run-analysis" class="btn-demo"><i data-lucide="cpu"></i> RUN AI ANALYSIS</button>
+                <div class="live-indicator">
+                    <span class="dot pulse"></span> Engine Active
+                </div>
+                <div class="user-profile">
+                    <div class="avatar">Admin</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="view-container">
+            
+            <!-- 0. OPERATIONAL SCENARIO SETUP -->
+            <section id="scenario-input" class="view active">
+                <div class="view-header">
+                    <h2>OPERATIONAL SCENARIO <span class="subtitle">Enter expected operational parameters for AI analysis</span></h2>
+                </div>
+                
+                <div class="input-grid">
+                    <div class="card glass input-section">
+                        <h3><i data-lucide="users"></i> Demand & Capacity</h3>
+                        <div class="form-group">
+                            <label>Expected People / Customers</label>
+                            <input type="number" id="in-expected-people" value="1000">
+                        </div>
+                        <div class="form-group">
+                            <label>Peak Arrival Rate (people/hour)</label>
+                            <input type="number" id="in-peak-rate" value="250">
+                        </div>
+                        <div class="form-group">
+                            <label>Operating Duration (hours)</label>
+                            <input type="number" id="in-duration" value="6">
+                        </div>
+                    </div>
+
+                    <div class="card glass input-section">
+                        <h3><i data-lucide="briefcase"></i> Workforce & Service</h3>
+                        <div class="form-group">
+                            <label>Available Staff</label>
+                            <input type="number" id="in-staff" value="40">
+                        </div>
+                        <div class="form-group">
+                            <label>Service Counters / Points</label>
+                            <input type="number" id="in-counters" value="8">
+                        </div>
+                        <div class="form-group">
+                            <label>Avg Service Time (minutes/person)</label>
+                            <input type="number" id="in-service-time" value="4">
+                        </div>
+                    </div>
+
+                    <div class="card glass input-section">
+                        <h3><i data-lucide="package"></i> Resources</h3>
+                        <div class="form-group">
+                            <label>Available Inventory / Resources</label>
+                            <input type="number" id="in-resources" value="850">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-bar mt-4">
+                    <button class="btn-primary w-full" style="font-size: 1.2rem; padding: 15px;" onclick="document.getElementById('btn-run-analysis').click()">
+                        ANALYZE SCENARIO
+                    </button>
+                </div>
+            </section>
+
+            <!-- 1. DASHBOARD & HEALTH -->
+            <section id="dashboard" class="view">
+                <div class="view-header">
+                    <h2>OPERATIONAL HEALTH <span class="subtitle">Real-time calculated system readiness</span></h2>
+                </div>
+                
+                <div class="dashboard-split">
+                    <div class="dash-left">
+                        <div class="health-score-card card glass">
+                            <div class="health-score-circle" id="health-circle">
+                                <span id="health-score-val">72</span><small>/ 100</small>
+                            </div>
+                            <div class="health-breakdown" id="health-breakdown">
+                                <!-- Populated via JS -->
+                            </div>
+                        </div>
+
+                        <div class="card glass mt-4">
+                            <h3>PREDICTIVE TIMELINE</h3>
+                            <div class="predictive-timeline" id="predictive-timeline">
+                                <!-- Populated via JS -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dash-right">
+                        <div class="card glass">
+                            <h3>KEY METRICS (CALCULATED)</h3>
+                            <div class="kpi-grid" id="calc-kpi-container" style="grid-template-columns: 1fr 1fr;">
+                                <!-- KPIs -->
+                            </div>
+                        </div>
+                        <div class="card glass mt-4">
+                            <h3>WHAT WILL GO WRONG?</h3>
+                            <div class="alert-feed" id="dashboard-problems">
+                                <!-- Snippets of problems -->
+                            </div>
+                            <button class="btn-action w-full mt-4" onclick="switchView('predictions')">View Detailed AI Analysis</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. AI PREDICTIONS (What Will Go Wrong & Why) -->
+            <section id="predictions" class="view">
+                <div class="view-header">
+                    <h2>AI ANALYSIS: RISKS & EXPLANATIONS <span class="subtitle">Identified operational bottlenecks and transparent reasoning</span></h2>
+                </div>
+                <div class="predictions-grid" id="predictions-container">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- 3. AI OPERATIONAL PLAN (Recommendations & Allocation) -->
+            <section id="operational-plan" class="view">
+                <div class="view-header">
+                    <h2>AI OPERATIONAL PLAN <span class="subtitle">Actionable recommendations and optimized resource allocation</span></h2>
+                </div>
+                
+                <div class="dashboard-split">
+                    <div class="dash-left">
+                        <div class="card glass">
+                            <h3><i data-lucide="check-square"></i> WHAT SHOULD I DO?</h3>
+                            <div class="recommendations-list" id="recommendations-list">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dash-right">
+                        <div class="card glass">
+                            <h3><i data-lucide="git-pull-request"></i> AI RESOURCE ALLOCATION</h3>
+                            <div class="allocation-table" id="allocation-table">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+
+                        <div class="card glass mt-4" style="background: rgba(6, 182, 212, 0.05); border-color: var(--accent-cyan);">
+                            <h3><i data-lucide="info"></i> WHY THIS MATTERS</h3>
+                            <div id="ai-summary-panel">
+                                <!-- Text summary -->
+                            </div>
+                            <button class="btn-primary w-full mt-4" onclick="switchView('simulator')">Test in Simulator</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. WHAT-IF SIMULATOR -->
+            <section id="simulator" class="view">
+                <div class="view-header">
+                    <h2>WHAT-IF SIMULATION <span class="subtitle">Test operational interventions against the calculated baseline</span></h2>
+                </div>
+                
+                <div class="simulator-layout">
+                    <div class="sim-controls card glass">
+                        <h3>Intervention Variables</h3>
+                        <p class="text-muted mb-4" style="font-size:0.85rem">Adjust resources to see how they impact the operational health and bottlenecks.</p>
+                        
+                        <div class="control-group">
+                            <label>Add/Remove Staff: <span id="sim-val-staff">+0</span></label>
+                            <input type="range" id="sim-mod-staff" min="-10" max="30" value="0">
+                        </div>
+                        <div class="control-group">
+                            <label>Open/Close Counters: <span id="sim-val-counters">+0</span></label>
+                            <input type="range" id="sim-mod-counters" min="-2" max="10" value="0">
+                        </div>
+                        <div class="control-group">
+                            <label>Add/Remove Resources: <span id="sim-val-resources">+0</span></label>
+                            <input type="range" id="sim-mod-resources" min="-100" max="500" value="0" step="50">
+                        </div>
+                        <div class="control-group">
+                            <label>Improve Service Time (mins): <span id="sim-val-time">0</span></label>
+                            <input type="range" id="sim-mod-time" min="-2" max="2" value="0" step="0.5">
+                        </div>
+                        
+                        <button id="btn-run-sim" class="btn-primary w-full mt-4">RUN SIMULATION</button>
+                        <button id="btn-apply-plan" class="btn-demo w-full mt-2" style="justify-content:center">APPLY AI PLAN</button>
+                    </div>
+                    
+                    <div class="sim-results card glass">
+                        <div id="sim-loading" class="sim-loading hidden">
+                            <i data-lucide="loader" class="spin"></i>
+                            <p id="sim-loading-text">Recalculating scenario...</p>
+                        </div>
+                        
+                        <div id="sim-comparison" class="comparison-grid">
+                            <div class="state-card current-state">
+                                <h3>CURRENT PLAN</h3>
+                                <div id="sim-current-metrics">
+                                    <!-- JS populated -->
+                                </div>
+                            </div>
+                            
+                            <div class="state-card simulated-state" style="border-color: var(--accent-cyan);">
+                                <h3>PROPOSED SCENARIO</h3>
+                                <div id="sim-proposed-metrics">
+                                    <!-- JS populated -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. DIGITAL TWIN -->
+            <section id="digital-twin" class="view">
+                <div class="view-header">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h2>OPERATIONAL DIGITAL TWIN <span class="subtitle">Visual representation of calculated bottlenecks</span></h2>
+                        </div>
+                        <div class="twin-toggle">
+                            <button id="btn-twin-before" class="btn-action active">Before AI</button>
+                            <button id="btn-twin-after" class="btn-action secondary">After AI Intervention</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="twin-container card glass">
+                    <div class="twin-layout" id="hotel-map">
+                        <!-- Rendered by JS -->
+                    </div>
+                    <div class="twin-details" id="twin-inspector">
+                        <h3>Select an entity</h3>
+                        <p class="text-muted">Click a highlighted zone to view calculated metrics.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. KNOWLEDGE GRAPH -->
+            <section id="knowledge-graph" class="view">
+                <div class="view-header">
+                    <h2>BUSINESS KNOWLEDGE GRAPH <span class="subtitle">Entity relationships and data dependencies</span></h2>
+                </div>
+                <div class="graph-layout">
+                    <div class="card glass" style="flex: 1; height: 600px; padding: 0;">
+                        <div id="kg-network" style="width: 100%; height: 100%;"></div>
+                    </div>
+                    <div class="card glass" style="width: 300px; margin-left: 20px;">
+                        <h3>Entity Details</h3>
+                        <div id="kg-details">
+                            <p class="text-muted">Click a node to explore connections.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. DATA SOURCES & HEALTH -->
+            <section id="data-sources" class="view">
+                <div class="view-header">
+                    <h2>SYSTEM HEALTH & DATA <span class="subtitle">Data pipelines and AI engine status</span></h2>
+                </div>
+                
+                <div class="dashboard-split">
+                    <div class="card glass">
+                        <h3>Data Integration Status</h3>
+                        <ul class="data-sources-list">
+                            <li><span>Input Module</span> <span class="status-live"><span class="dot"></span> Active</span></li>
+                            <li><span>Calculation Engine</span> <span class="status-live"><span class="dot"></span> Active</span></li>
+                            <li><span>Simulation Core</span> <span class="status-live"><span class="dot"></span> Active</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- AI Assistant Panel (Preserved) -->
+    <div class="ai-assistant-panel minimized" id="ai-panel">
+        <div class="ai-header" onclick="toggleAI()">
+            <div class="ai-title">
+                <i data-lucide="bot"></i>
+                <div>
+                    <strong>NERVA</strong>
+                    <small>Operational Intelligence</small>
+                </div>
+            </div>
+            <i data-lucide="chevron-up" id="ai-toggle-icon"></i>
+        </div>
+        <div class="ai-body" id="ai-chat">
+            <div class="chat-message bot">
+                Hello. Enter your operational scenario parameters and I will analyze the risks and provide an optimization plan.
+            </div>
+        </div>
+        <div class="ai-suggestions">
+            <button onclick="sendPrompt(this)">What is the main bottleneck?</button>
+            <button onclick="sendPrompt(this)">How can we improve health score?</button>
+        </div>
+        <div class="ai-input">
+            <input type="text" id="ai-input-field" placeholder="Ask Nerva...">
+            <button onclick="sendChatMessage()"><i data-lucide="send"></i></button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/digital-twin.js"></script>
+    <script src="js/graph.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
